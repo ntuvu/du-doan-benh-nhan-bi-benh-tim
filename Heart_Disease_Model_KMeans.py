@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 import pickle
 import json
 import requests
+from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
 
 # Load Dataset
 dataset = pd.read_csv('heart.csv')
@@ -14,10 +16,6 @@ X = dataset.iloc[:, :-1]
 
 # Selecting Target
 y = dataset.iloc[:, -1]
-
-# Printing Features And Target names
-# print('Features :' , X)
-# print('Target :', y)
 
 # Printing Shapes
 print(X.shape)
@@ -33,26 +31,9 @@ sc_X = StandardScaler()
 train_X = sc_X.fit_transform(train_X)
 test_X = sc_X.transform(test_X)
 
-
-# K-Means clustering
-from sklearn.cluster import KMeans
-kmeans = KMeans(n_clusters=2, random_state=0)
-kmeans.fit(train_X)
-
-# Predicting cluster labels for test set
-test_clusters = kmeans.predict(test_X)
-
-# Converting cluster labels to target values
-test_prediction = np.where(test_clusters == 0, 0, 1)
-
-# Accuracy Score
-from sklearn import metrics
-print("AUC score: {:.5f}".format(metrics.accuracy_score(test_y, test_prediction)))  # OUTPUT: AUC score: 0.72527
-print("MAE score: {:.5f}".format(metrics.mean_absolute_error(test_y, test_prediction)))  # OUTPUT: MAE score: 0.27473
-
 # Plotting SSE for different K values
 v = []
-k_range = list(range(1, 10))
+k_range = list(range(2, 30))
 for k in k_range:
     kmeans = KMeans(n_clusters=k, random_state=0)
     kmeans.fit(train_X)
@@ -64,13 +45,23 @@ plt.ylabel('Sum of Squared Errors (SSE)')
 plt.show()
 
 # Training model with best K value
-kmeans = KMeans(n_clusters=20, random_state=0)
+best_k = 20  # Update with the best K value you determined
+kmeans = KMeans(n_clusters=best_k, random_state=0)
 kmeans.fit(train_X)
+
+# Predicting cluster labels for test set
 test_clusters = kmeans.predict(test_X)
+
+# Converting cluster labels to target values
 test_prediction = np.where(test_clusters == 0, 0, 1)
+
+# Calculate Silhouette Score
+silhouette_avg = silhouette_score(test_X, test_clusters)
+print("Silhouette Score:", silhouette_avg)
 
 # Dumping file to pickle to make Python instances
 pickle.dump(kmeans, open('model_kmeans.pkl', 'wb'))
 
-print("AUC score: {:.5f}".format(metrics.accuracy_score(test_y, test_prediction)))  # OUTPUT: AUC score: 0.72527
-print("MAE score: {:.5f}".format(metrics.mean_absolute_error(test_y, test_prediction)))  # OUTPUT: MAE score: 0.27473
+# Accuracy Score
+from sklearn import metrics
+

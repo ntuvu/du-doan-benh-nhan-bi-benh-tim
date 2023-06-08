@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import pickle
 import json
 import requests
+from sklearn.metrics import precision_score, recall_score, f1_score, roc_curve, roc_auc_score
 
 # Load Dataset
 dataset = pd.read_csv('heart.csv')
@@ -14,10 +15,6 @@ X = dataset.iloc[:, :-1]
 
 # Selecting Target
 y = dataset.iloc[:, -1]
-
-# Printing Features And Target names
-# print('Features :' , X)
-# print('Target :', y)
 
 # Printing Shapes
 print(X.shape)
@@ -49,7 +46,7 @@ print("MAE score: {:.5f}".format(metrics.mean_absolute_error(test_y, test_predic
 
 # Plotting best K value for KNN
 v = []
-k_range = list(range(1,50))
+k_range = list(range(1, 50))
 for i in k_range:
     knn = KNeighborsClassifier(n_neighbors=i)
     # fit the model with training data
@@ -67,8 +64,30 @@ knn = KNeighborsClassifier(n_neighbors=6)
 knn.fit(train_X, train_y)
 test_prediction = knn.predict(test_X)
 
+precision = precision_score(test_y, test_prediction)
+recall = recall_score(test_y, test_prediction)
+f1_measure = f1_score(test_y, test_prediction)
+roc_auc = roc_auc_score(test_y, test_prediction)
+
+# Printing the results
+print("Precision: {:.5f}".format(precision))
+print("Recall: {:.5f}".format(recall))
+print("F-measure: {:.5f}".format(f1_measure))
+print("ROC AUC: {:.5f}".format(roc_auc))
+
+# ROC Curve
+fpr, tpr, thresholds = roc_curve(test_y, test_prediction)
+
+plt.plot(fpr, tpr, color='orange', label='ROC curve (area = {:.5f})'.format(roc_auc))
+plt.plot([0, 1], [0, 1], color='navy', linestyle='--')
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver Operating Characteristic (ROC)')
+plt.legend(loc='lower right')
+plt.show()
+
 # Dumping file to pickle to make python instances
 pickle.dump(knn, open('model_knn.pkl', 'wb'))
 
 print("AUC score: {:.5f}".format(metrics.accuracy_score(test_y, test_prediction)))  # OUTPUT: AUC score: 0.86813
-print("MAE score: {:.5f}".format(metrics.mean_absolute_error(test_y, test_prediction)))  # OUTPUT: MAE score: 0.13187
+print("MAE score: {:.5f}".format(metrics.mean_absolute_error(test_y, test_prediction))) 
