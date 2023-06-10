@@ -16,11 +16,11 @@ X = dataset.iloc[:, :-1]
 # Selecting Target
 y = dataset.iloc[:, -1]
 
-# Printing Shapes
+# In ra so chieu cua 2 tap x, y
 print(X.shape)
 print(y.shape)
 
-# Splitting Training and testing Data
+# Chia cac bo du lieu train va test
 from sklearn.model_selection import train_test_split
 train_X, test_X, train_y, test_y = train_test_split(X, y, test_size=0.3, random_state=0)
 
@@ -39,12 +39,12 @@ knn.fit(train_X, train_y)
 # Predicting value from test set
 test_prediction = knn.predict(test_X)
 
-# Accuracy Score
-from sklearn import metrics
-print("AUC score: {:.5f}".format(metrics.accuracy_score(test_y, test_prediction)))  # OUTPUT: AUC score: 0.81319
-print("MAE score: {:.5f}".format(metrics.mean_absolute_error(test_y, test_prediction)))  # OUTPUT: MAE score: 0.18681
 
-# Plotting best K value for KNN
+from sklearn import metrics
+# print("AUC score: {:.5f}".format(metrics.accuracy_score(test_y, test_prediction)))  # OUTPUT: AUC score: 0.81319
+# print("MAE score: {:.5f}".format(metrics.mean_absolute_error(test_y, test_prediction)))  # OUTPUT: MAE score: 0.18681
+
+# Su dung vong lap tim K toi uu nhat
 v = []
 k_range = list(range(1, 50))
 for i in k_range:
@@ -59,23 +59,24 @@ plt.plot(k_range, v, c='orange')
 plt.show()
 
 
-# Training model with best K value
-knn = KNeighborsClassifier(n_neighbors=6)
+# Tien hanh huan luyen model
+knn = KNeighborsClassifier(n_neighbors=10)
 knn.fit(train_X, train_y)
 test_prediction = knn.predict(test_X)
 
+#Tinh toan cac gia tri danh gia presition, recall, f1, roc_auc
 precision = precision_score(test_y, test_prediction)
 recall = recall_score(test_y, test_prediction)
 f1_measure = f1_score(test_y, test_prediction)
 roc_auc = roc_auc_score(test_y, test_prediction)
 
-# Printing the results
+# In ra cac chi so danh gia model
 print("Precision: {:.5f}".format(precision))
 print("Recall: {:.5f}".format(recall))
 print("F-measure: {:.5f}".format(f1_measure))
 print("ROC AUC: {:.5f}".format(roc_auc))
 
-# ROC Curve
+# Hien thi duong cong ROC
 fpr, tpr, thresholds = roc_curve(test_y, test_prediction)
 
 plt.plot(fpr, tpr, color='orange', label='ROC curve (area = {:.5f})'.format(roc_auc))

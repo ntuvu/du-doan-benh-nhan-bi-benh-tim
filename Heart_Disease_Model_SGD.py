@@ -39,9 +39,9 @@ sgd.fit(train_X, train_y)
 # Predicting value from test set
 test_prediction = sgd.predict(test_X)
 
-# Accuracy Score
-print("AUC score: {:.5f}".format(metrics.accuracy_score(test_y, test_prediction)))
-print("MAE score: {:.5f}".format(metrics.mean_absolute_error(test_y, test_prediction)))
+# # Accuracy Score
+# print("AUC score: {:.5f}".format(metrics.accuracy_score(test_y, test_prediction)))
+# print("MAE score: {:.5f}".format(metrics.mean_absolute_error(test_y, test_prediction)))
 
 # Printing the results
 precision = precision_score(test_y, test_prediction)
@@ -53,6 +53,8 @@ print("Precision: {:.5f}".format(precision))
 print("Recall: {:.5f}".format(recall))
 print("F-measure: {:.5f}".format(f1_measure))
 print("ROC AUC: {:.5f}".format(roc_auc))
+
+pickle.dump(sgd, open('model_sgd.pkl', 'wb'))
 
 # ROC Curve
 fpr, tpr, thresholds = roc_curve(test_y, test_prediction)
