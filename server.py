@@ -1,21 +1,14 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Mar 15 11:27:41 2019
 
-@author: Jeel Patel
 
-FILE :- server.py 
-"""
 
-# Libraries
 import numpy as np
 from flask import Flask, request, jsonify
 import pickle
 
-# Using Flask create API
+
 app = Flask(__name__)
 
-# Build API Route
+
 
 
 @app.route('/api/v01', methods=['POST'])

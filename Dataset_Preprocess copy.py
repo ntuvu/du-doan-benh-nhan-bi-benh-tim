@@ -1,7 +1,7 @@
 import pandas as pd
 
-input_file = "heart_disease_data_raw.data"
-output_file = "Processed_Dataset.csv"
+input_file = "heart_disease_test_data_raw.data"
+output_file = "Processed_Test.csv"
 column_names = ['age', 'sex', 'cp', 'trestbps', 'chol', 'fbs', 'restecg', 'thalach', 'exang', 'oldpeak', 'slope', 'ca', 'thal', 'target']
 
 # Đọc file dữ liệu raw và tạo 1 DataFrame
