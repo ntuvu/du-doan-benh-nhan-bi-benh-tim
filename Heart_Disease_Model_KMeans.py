@@ -9,7 +9,7 @@ from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 
 # Load Dataset
-dataset = pd.read_csv('heart.csv')
+dataset = pd.read_csv('processed_data.csv')
 
 # Selecting Features
 X = dataset.iloc[:, :-1]
