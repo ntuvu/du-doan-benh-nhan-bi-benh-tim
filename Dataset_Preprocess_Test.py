@@ -10,8 +10,8 @@ df = pd.read_csv(input_file, header=None, names=column_names, na_values='?')
 # Đưa các giá trị bị trống hoặc ngoại lai về thành kiểu NaN
 df = df.apply(pd.to_numeric, errors='coerce')
 
-# Lấp lại các giá trị bị thiếu bằng cách tính giá trị trung bình của cột tương ứng
-df.fillna(df.mean(), inplace=True)
+# Lấp lại các giá trị bị thiếu bằng cách thay bằng giá trị có tần suất lặp lại nhiều nhất
+df.fillna(df.mode().iloc[0], inplace=True)
 
 #Chuyển giá trị nhãn target về dạng nhị phân(0 , 1)
 df['target'] = df['target'].apply(lambda x: 0 if x == 0 else 1)

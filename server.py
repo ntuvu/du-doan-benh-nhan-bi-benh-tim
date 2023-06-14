@@ -17,7 +17,7 @@ def predict():
     data = request.get_json(force=True)
 
     # Load the model
-    model = pickle.load(open('model.pkl', 'rb'))
+    model = pickle.load(open('model_knn.pkl', 'rb'))
 
     # storing data
     age = data['age']
